@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  php:
+    # build:
+    #   context: ./
+    #   dockerfile: Dockerfile
+    image: ariimam/mazer-php:v1
+    # container_name: php_stisla
+    # restart: unless-stopped
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "9000:9000"
+    networks:
+      - laravelss
+    # deploy:
+    #   replicas: 2
+  nginx:
+    image: ariimam/mazer-web:v1
+    # build:
+    #   context: ./
+    #   dockerfile: Dockerfile-nginx
+    # container_name: web
+    # restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+    #   - ./:/var/www/html
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+      - laravelss
+    # deploy:
+    #   replicas: 2
+    depends_on:
+      - php
+#   mysql:
+#     image: mysql:5.7.22
+#     container_name: stisla-mysql
+#     # restart: unless-stopped
+#     # tty: true
+#     ports:
+#       - "3306:3306"
+#     volumes:
+#       - ./dbdata:/var/lib/mysql
+#     networks:
+#       - laravels
+#     environment:
+#       MYSQL_DATABASE: laravel
+#       MYSQL_USER: root
+#       MYSQL_ROOT_PASSWORD: root
+#       MYSQL_PASSWORD: root
+#       SERVICE_TAGS: dev
+#       SERVICE_NAME: mysql
+
+networks:
+  laravelss:
+    # external:
+    #   name: laravelss
