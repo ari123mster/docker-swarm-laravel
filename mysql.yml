@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+
+  prod:
+    image: mysql:8.0
+    hostname: mysql-8
+    command: '--default-authentication-plugin=mysql_native_password'
+    networks:
+      - durbok-net
+    deploy:
+      placement:
+        constraints:
+        - node.role == manager
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - ./conf.d:/etc/mysql/conf.d
+      - ./dbdata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: urrootpass
+
+networks:
+  durbok-net:
+    external: true
